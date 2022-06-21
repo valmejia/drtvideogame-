@@ -5,31 +5,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dr.T</title>
-    <link rel="stylesheet" href="./styles/mystyles.css">
+    <link rel="icon" type="image/x-icon" href=""> <!-- imagen pestana -->
+    <link rel="stylesheet" href="./styles/mystyles.css"> 
 </head>
 <body>
 
-    <div class="game-intro"> 
+    <div class="container"> 
         <section>
-            <h1>Las aventuras del Dr.T</h1>
+            <h1 class="titledesa">Las aventuras del Dr.T</h1>
+            <quote></quote>
         </section>
+
         <section>
-            <button id="start" onclick="StartGame()">StartGame</button>
-            <canvas width="900" height="600" id="escenario" class="noShow"></canvas>
+            <button id="start" onclick="StartGame()">Comenzar a jugar</button>
+            <canvas width="900" height="600" id="inicio" class="noShow"></canvas>
         </section>
+
        <section> 
-            <button>Instrucciones</button>
+            <button id="instrucciones"  onclick="instrucciones()">Instrucciones</button>
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <div class="textbox">
+                        <h2>Instrucciones</h2>
+                        <p>Queridx amigx: 
+                            Calixto careado está intentando atacar la ciudad, 
+                            junto con sus malvados secuaces: Caries e Infecciones.
+                            <br> Necesito tu ayuda para exterminarlos y poder tener dientes sanos. 
+                            Sigue los siguientes comandos para que ganemos.</br>
+                            <ul> <li>Atacar  "Enter".</li>
+                                <li> Saltar "BARRA ESPACIADORA".</li>
+                                
+                       
+                            </ul>
+                            <br>Ten cuidado!</br> 
+                            <br>
+                                Solamente tenemos cinco oportunidades para vencer al malvado, 
+                                cuando ya no tengas corazones, Calixto habrá ganado.
+                            </br> 
+                            <br> Si chocas con Calixto, pierdes automaticamente.  </br>
+                            <br> Las Infecciones te quitan 20 puntos si te alcanzan, pero ganas 20 puntos por exterminarlo.  </br>
+                            <br> Las Caries te quitan 10 puntos, pero ganas 10 puntos por exterminarlo </br>
+                            <br> 
+                             Atentamente, tu amigx Dr.T 
+                            </br>
+                        </p>
+                  </div>
+                  
+                </div>
+              
+            </div>
+         <button id="agradecimientos" onclick="agradecimientos()">Agradecimientos</button>
+         <canvas width="900" height="600" id="iniciar" class="noShow"></canvas>
        </section>
 
-       <section>
-         <button>Agradecimientos especiales</button>
-       </section>
-       
     </div>
-
-    <div> 
-
-    </div>
+    
+    <script src ="javascript/index.js"></script>
 
 </body>
 </html>
