@@ -5,6 +5,7 @@
 canvas {
     margin: 0;
     padding: 0;
+    border: 5px solid red;
 }
 
 body{
@@ -53,6 +54,8 @@ body{
   /* textbox */
   .textbox{
       text-align: justify;
+      padding: 20px;
+      margin: 5px;
   }
 
 
@@ -61,6 +64,7 @@ h1,
 h2 {
     text-align: center;
     margin: 5px;
+    margin-bottom: 20px;
 }
 
 .noShow{
@@ -78,5 +82,22 @@ h2 {
 
 button{
     margin: 5px;
-    padding: 5px;
+    padding: 45px;
+    border-radius: 15px;
+    border: 1px solid black;
+    background-image:url('../img/backmac.jpeg') /*imagen1*/
+
+}
+
+button:hover{
+    /*cambiar estilo cuando se selecciona*/
+    border: 1px;
+
+    background-image:url('../img/fondorosa.jpeg') /*imagen2*/
+
+    /*background-image: url('../img/corazonvidas.png');
+    background-repeat:no-repeat;*/
+
+    /*background-image:url('https://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/256/add-1-icon.png');
+    background-repeat:no-repeat;*/
 }
