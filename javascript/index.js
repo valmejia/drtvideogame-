@@ -11,8 +11,8 @@ calixto.src = "../img/calixtoporelmomento.png"
 const carie = new Image()
 carie.src = "../img/cariepem.png"
 
-const corazon = new Image()
-corazon.src = "../img/corazonvidas.png"
+const livehearts = new Image()
+livehearts.src = "../img/corazonvidas.png"
 
 const drtu = new Image()
 drtu.src = "../img/drtporlomientras.png"
@@ -31,8 +31,8 @@ backimag.src = "../img/backmac.jpeg"
 
  /////////////////////////////////// enemiessss ////////////////////////////////
 
- const enemies = []
-
+ const enemigos = []
+ 
 
 
 ///////////////////////////// FUNCIONES PARA BOTONES /////////////////////////////////
@@ -54,7 +54,10 @@ function StartGame(){
 
     ////poner fondo////
     updateCanvas()
-
+    
+    setInterval(()  => {
+        makeEnemigo() 
+    }, 500);
 }
 
 function instrucciones(){
@@ -101,13 +104,15 @@ window.onclick = function(event) {
 //////////////////////////// CLASE PERSONAJE ///////////////////////////////////////
 
 class personajes {
-    constructor(x, y, ctx, img) {
+    constructor(x, y, ctx, img, widthimg, heightimg) {
         this.x = x
         this.y = y
-        this.vida = 20
+        this.vida = 100
         this.velocidad = 1
         this.ctx = ctx
         this.img = img;
+        this.widthimg = widthimg
+        this.heightimg = heightimg
         this.dibujandoMonitos()
     }
 
@@ -115,15 +120,7 @@ class personajes {
         this.vida -= damage
     }
 
-    movetofront() {
-        this.x += 2
-    }
-
-    movetoback() {
-        this.x -= 2
-    }
-
-    jump() {
+    subir() {
         this.y -= 85
     }
 
@@ -144,25 +141,25 @@ class personajes {
     }
 
     dibujandoMonitos() {
-        this.ctx.drawImage(this.img, this.x, this.y, 50, 50)
+        this.ctx.drawImage(this.img, this.x, this.y, this.widthimg, this.heightimg)
     }
-}
+} 
 
 
 ///////////////////////////// CLASES DE LOS PERSONAJES /////////////////////////////
 
 class Drt extends personajes {
-    constructor(x, y, ctx, image) {
-        super(x, y, ctx, image)
+    constructor(x, y, ctx, image, width, height) {
+        super(x, y, ctx, image, width, height)
         this.kills = 0
     }
 }
 
 class Enemies extends personajes{
-    constructor(x, y, ctx, image) {
-        super(x, y, ctx, image)
+    constructor(x, y, ctx, image, width, height) {
+        super(x, y, ctx, image, width, height)
     }
-}
+} 
 
 //////////////////////////////////////// CLASE PASTA ////////////////////////////////
 class pastota {
@@ -182,21 +179,19 @@ class pastota {
 
 document.addEventListener('keydown', (event) => {
     switch (event.key) {
-        case "ArrowLeft":
-            drt.movetoback(); console.log('rigth');
-            break;
-        case "ArrowRight":
-            drt.movetofront();  console.log('left'); 
-            break;
         case "ArrowDown":
+           if(drt.y + 85 < canvas.height){
             drt.bajar(); console.log('bajando')
+           } 
+           break;
+        case "ArrowUp":
+            if(drt.y - 85 > 0){
+                drt.subir(); console.log('subir')
+            }
             break;
-        case "Enter":
+        case " ":
             drt.disparar(); console.log('disparo')
          break;
-        case " ":
-           drt.jump(); console.log('jumping')
-            break;
     }
 })
 
@@ -222,11 +217,11 @@ const backgroundImage = {
         }
       },*/
 
-      ctx.drawImage(this.img, this.x, 0,);
+      ctx.drawImage(this.img, this.x, 0, 720,360);
         if (this.speed < 0) {
-          ctx.drawImage(this.img, this.x + canvas.width, 0, );
+          ctx.drawImage(this.img, this.x + canvas.width, 0, 720, 360);
         } else {
-          ctx.drawImage(this.img, this.x - this.img.width, 0,);
+          ctx.drawImage(this.img, this.x - this.img.width, 0, 720, 360);
         }
     },
 };
@@ -234,17 +229,29 @@ const backgroundImage = {
 backimag.onload = updateCanvas;
 
 /////////////////////////////////// CAJAS DE LOS PERSONAJES ////////////////////////////
-const drt = new Drt(0,0, ctx, drtu) 
-
+const drt = new Drt(0, 280, ctx, drtu, 80, 80) 
+const cali = new Enemies(280, 0, ctx, calixto, 100,100)
+const cari = new Enemies(280,0,ctx, carie, 100,100)
+const inf = new Enemies(280,0,ctx, infeccion, 100,100)
 
 function updateCanvas() {
     backgroundImage.move();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     backgroundImage.draw();
     drt.dibujandoMonitos();
-    requestAnimationFrame(updateCanvas);
+    
+    enemigos.forEach((enemies, index) => {
+      enemies.x -= 2
+      enemies.dibujandoMonitos()
+    })
+
+   requestAnimationFrame(updateCanvas); 
 }
-  
+
+ 
+
+
+
 //////////////////////////////// BACKGROUND IMAGES CREDITOS/////////////////////////////////////
 
 const backgroundImageCreditos = {
@@ -281,26 +288,46 @@ backimag.onload = updateCanvascredits;
 
 //// FUNCTION VIDAS ////
 
-function liveshearts(vida){
+function liveshearts(){
 
-    ctx.drawImage(this.corazon)
+    ctx.drawImage()
 }
 
 
 ///////////////////////////////////// crear enemigos //////////////////////////////////
-/*function makeEnemigo (){
-    const enemigoAleatorio = Math.floor(Math.random * canvas.height)
-    if(enemigoAleatorio){
-        console.log("Agrega un enemigo")
-        let typeOfEnemie = calixto
-    } elseif(enemigoAleatorio){
-        console.log("Agrega un enemigo")
-        let typeOfEnemie = carie
-    } else{
-        let typeOfEnemie = infeccion
+function makeEnemigo (){
+    const enemigoAleatorio = Math.floor(Math.random() * 60)
+    const numeros = [1, 5, 11, 38]
+    const numeroscari = [9, 50, 60, 27]
+    const numerosinf = [40, 24, 52, 33]
+    let typeOfEnemie = calixto
+    let ejeY = Math.floor(Math.random() * (canvas.height - 100) ) 
+
+    if(numeros.includes(enemigoAleatorio)){
+       console.log("Agrega un enemigo")
+       typeOfEnemie = calixto 
+       const enemies = new Enemies(630, ejeY, ctx, typeOfEnemie, 100,100) ///ancho del canvas menos la imagen
+       enemigos.push(enemies)  
+    }  else if(numeroscari.includes(enemigoAleatorio)){
+        console.log("enemigo")
+        typeOfEnemie = carie
+        const enemies = new Enemies(630,ejeY, ctx, typeOfEnemie, 100, 100)
+        enemigos.push(enemies)
+
+    }else if(numerosinf.includes(enemigoAleatorio)){ 
+        console.log("infecciones")
+        typeOfEnemie = infeccion
+        const enemies = new Enemies(630,ejeY, ctx, typeOfEnemie, 100, 100)
+        enemigos.push(enemies) 
     }
-     const enemies = new Enemies(0,0, ctx, typeOfEnemie)
-     enemigos.push(enemies)
+    
+}
+
+// esto es para determinar el enemigo aleatorio que le va a salir, definir afuera y asignar adentro del if 
+
+/*if (!drtu.estaVivo()) {
+    alert("game over")
+    cancelAnimationFrame()
 }*/
 
-  
+
