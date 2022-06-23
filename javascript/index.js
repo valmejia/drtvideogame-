@@ -9,7 +9,7 @@ const calixto = new Image()
 calixto.src = "../img/calixtoporelmomento.png"
 
 const carie = new Image()
-carie.src = "../img/cariepem.png"
+carie.src = "../img/carie.png"
 
 const livehearts = new Image()
 livehearts.src = "../img/corazonvidas.png"
@@ -17,24 +17,19 @@ livehearts.src = "../img/corazonvidas.png"
 const drtu = new Image()
 drtu.src = "../img/drtporlomientras.png"
 
-const fondoflor = new Image()
-fondoflor.src="../img/fondo.jpeg"
-
 const infeccion = new Image()
-infeccion.src = "../img/infeccionpem.png"
+infeccion.src = "../img/infeccion.png"
 
 const pastita = new Image()
 pastita.src = "../img/pasta.png"
 
 const backimag = new Image()
-backimag.src = "../img/backmac.jpeg"
+backimag.src = "../img/Background.png"
 
  /////////////////////////////////// enemiessss ////////////////////////////////
 
  const enemigos = []
  
-
-
 ///////////////////////////// FUNCIONES PARA BOTONES /////////////////////////////////
 
 function quitarbuttons(){
@@ -161,6 +156,7 @@ class Enemies extends personajes{
     }
 } 
 
+
 //////////////////////////////////////// CLASE PASTA ////////////////////////////////
 class pastota {
     constructor(x, y, img, ctx) {
@@ -185,7 +181,7 @@ document.addEventListener('keydown', (event) => {
            } 
            break;
         case "ArrowUp":
-            if(drt.y - 85 > 0){
+            if(drt.y - 60 > 0){
                 drt.subir(); console.log('subir')
             }
             break;
@@ -229,69 +225,31 @@ const backgroundImage = {
 backimag.onload = updateCanvas;
 
 /////////////////////////////////// CAJAS DE LOS PERSONAJES ////////////////////////////
-const drt = new Drt(0, 280, ctx, drtu, 80, 80) 
+const drt = new Drt(0, 250, ctx, drtu, 80, 80) 
 const cali = new Enemies(280, 0, ctx, calixto, 100,100)
-const cari = new Enemies(280,0,ctx, carie, 100,100)
-const inf = new Enemies(280,0,ctx, infeccion, 100,100)
+const cari = new Enemies(280,0,ctx, carie, 128,190)
+const inf = new Enemies(280,0,ctx, infeccion, 206, 116)
+
 
 function updateCanvas() {
     backgroundImage.move();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     backgroundImage.draw();
     drt.dibujandoMonitos();
-    
     enemigos.forEach((enemies, index) => {
       enemies.x -= 2
       enemies.dibujandoMonitos()
     })
-
+    //detectarcolision()
    requestAnimationFrame(updateCanvas); 
 }
 
- 
-
-
-
-//////////////////////////////// BACKGROUND IMAGES CREDITOS/////////////////////////////////////
-
-const backgroundImageCreditos = {
-    img: backimag, //background 
-    x: 0,
-    y: 0, 
-    speed: -1, 
-    move: function(){
-        this.y += this.speed;
-        this.y %= canvas.height;
-    },
-
-    draw: function() {
-        ctx.drawImage(this.img, this.y, 0);
-        if (this.speed < 0) {
-          ctx.drawImage(this.img, this.y + canvas.height, 0);
-        } else {
-          ctx.drawImage(this.img, this.y - this.img.height, 0);
-        }
-    },
-};
-
-
-function updateCanvascredits() {
-  backgroundImageCreditos.move();
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  backgroundImageCreditos.draw();
-  requestAnimationFrame(updateCanvascredits);
-};
-
-backimag.onload = updateCanvascredits;
-
-//////////////////////////////////////////////////////////////////////////
 
 //// FUNCTION VIDAS ////
 
-function liveshearts(){
-
-    ctx.drawImage()
-}
+/*unction vidas(){
+    ctx.drawImage(livehearts);
+}*/
 
 
 ///////////////////////////////////// crear enemigos //////////////////////////////////
@@ -302,7 +260,6 @@ function makeEnemigo (){
     const numerosinf = [40, 24, 52, 33]
     let typeOfEnemie = calixto
     let ejeY = Math.floor(Math.random() * (canvas.height - 100) ) 
-
     if(numeros.includes(enemigoAleatorio)){
        console.log("Agrega un enemigo")
        typeOfEnemie = calixto 
@@ -317,7 +274,7 @@ function makeEnemigo (){
     }else if(numerosinf.includes(enemigoAleatorio)){ 
         console.log("infecciones")
         typeOfEnemie = infeccion
-        const enemies = new Enemies(630,ejeY, ctx, typeOfEnemie, 100, 100)
+        const enemies = new Enemies(630, ejeY, ctx, typeOfEnemie, 100, 100)
         enemigos.push(enemies) 
     }
     
@@ -325,9 +282,52 @@ function makeEnemigo (){
 
 // esto es para determinar el enemigo aleatorio que le va a salir, definir afuera y asignar adentro del if 
 
-/*if (!drtu.estaVivo()) {
+/*if (!drt.estaVivo()) {
     alert("game over")
     cancelAnimationFrame()
 }*/
 
 
+
+
+/*function mostrarDatos(vida, x, y, k) {
+    ctx.font = "40px Arial"
+    ctx.fillText(vida, 40, 40)
+    ctx.font = "18px Arial"
+    ctx.fillText(`X: ${x},Y: ${y} Kills: ${k}`, 700, 40)
+}
+
+mostrarDatos(drt.vida, drt.x, drt.y, drt.kills)
+
+const score = 0 */
+
+
+//////////////////////////////// FUNCTION COLISIONES /////////////////////////////
+/*function detectarcolision (){
+    enemigos.forEach((value, index) => {
+        console.log(value, drt)
+        if(intersecta(value, drt)){
+            alert('c muere')
+         return true
+        } else{
+            return false
+        }
+    })
+    
+}
+function intersecta(r1, r2){
+    return !(r2.left > r1.right || 
+        r2.right < r1.left || 
+        r2.top > r1.bottom ||
+        r2.bottom < r1.top);
+}
+
+
+/*enemigos.forEach((enemigo, index) => {
+    enemigo.x -= 2
+    enemigo.dibujarse()
+    if (enemigo.x === mario.x + 50 && enemigo.y === mario.y) {
+        mario.recibirDano(20)
+        enemigos.splice(index, 1)
+    }
+})*/
