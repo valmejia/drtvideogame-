@@ -6,7 +6,7 @@ const ctx = canvas.getContext('2d')
 
 /////////////////////////////////////// IMAGES ////////////////////////////////////////
 const calixto = new Image()
-calixto.src = "../img/calixtoporelmomento.png"
+calixto.src = "../img/calixto.png"
 
 const carie = new Image()
 carie.src = "../img/carie.png"
@@ -15,7 +15,7 @@ const livehearts = new Image()
 livehearts.src = "../img/corazonvidas.png"
 
 const drtu = new Image()
-drtu.src = "../img/drtporlomientras.png"
+drtu.src = "../img/4.png" 
 
 const infeccion = new Image()
 infeccion.src = "../img/infeccion.png"
@@ -24,11 +24,12 @@ const pastita = new Image()
 pastita.src = "../img/pasta.png"
 
 const backimag = new Image()
-backimag.src = "../img/Background.png"
+backimag.src = "../img/Background.jpeg"
 
  /////////////////////////////////// enemiessss ////////////////////////////////
 
  const enemigos = []
+ const bala = []
  
 ///////////////////////////// FUNCIONES PARA BOTONES /////////////////////////////////
 
@@ -124,7 +125,7 @@ class personajes {
     }
 
     disparar(x, y, img) {
-        const pastita = new pastota(x, y, img, ctx)
+        const pastita = new pastota(x, y, img, ctx, this.widthimg, this.heightimg)
         return pastita
     }
 
@@ -159,14 +160,16 @@ class Enemies extends personajes{
 
 //////////////////////////////////////// CLASE PASTA ////////////////////////////////
 class pastota {
-    constructor(x, y, img, ctx) {
+    constructor(x, y, img, ctx, widthimg, heightimg) {
         this.x = x
         this.y = y
         this.img = img
         this.ctx = ctx
+        this.widthimg = widthimg
+        this.heightimg = heightimg
     }
 
-    dibujarse() {
+    dibujandoMonitos() {
         this.ctx.drawImage(this.img, this.x, this.y, 30, 15)
     }
 }
@@ -176,17 +179,18 @@ class pastota {
 document.addEventListener('keydown', (event) => {
     switch (event.key) {
         case "ArrowDown":
-           if(drt.y + 85 < canvas.height){
+           if(drt.y + 134 < canvas.height){
             drt.bajar(); console.log('bajando')
            } 
            break;
         case "ArrowUp":
-            if(drt.y - 60 > 0){
+            if(drt.y - 80 > 0){
                 drt.subir(); console.log('subir')
             }
             break;
         case " ":
-            drt.disparar(); console.log('disparo')
+            const pasta = drt.disparar(drt.x + 80, drt.y + 50, pastita)
+            bala.push(pasta) 
          break;
     }
 })
@@ -225,10 +229,10 @@ const backgroundImage = {
 backimag.onload = updateCanvas;
 
 /////////////////////////////////// CAJAS DE LOS PERSONAJES ////////////////////////////
-const drt = new Drt(0, 250, ctx, drtu, 80, 80) 
-const cali = new Enemies(280, 0, ctx, calixto, 100,100)
+const drt = new Drt(0, 250, ctx, drtu, 200, 134) 
+const cali = new Enemies(280, 0, ctx, calixto, 250,150)
 const cari = new Enemies(280,0,ctx, carie, 128,190)
-const inf = new Enemies(280,0,ctx, infeccion, 206, 116)
+const inf = new Enemies(280,0,ctx, infeccion, 250, 167)
 
 
 function updateCanvas() {
@@ -236,20 +240,48 @@ function updateCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     backgroundImage.draw();
     drt.dibujandoMonitos();
-    enemigos.forEach((enemies, index) => {
-      enemies.x -= 2
-      enemies.dibujandoMonitos()
+    mostrarDatos(drt.vida, drt.x, drt.y, drt.kills) 
+
+   vidas()
+
+    bala.forEach((bal, indexbala) => {
+        bal.x += 1
+        bal.dibujandoMonitos()
+        enemigos.forEach((enemie, index) => {
+            console.log(enemie, bal.heightimg)
+          if(enemie.x <= bal.x + 30 && (enemie.y >= bal.y && enemie.y <= bal.y + bal.heightimg || 
+            enemie.y + enemie.heightimg >= bal.y && enemie.y + enemie.heightimg <= bal.y + bal.heightimg)){
+              enemigos.splice(index, 1)
+              bala.splice(index, 1)
+            }
+        })
     })
-    //detectarcolision()
+
+
+    enemigos.forEach((enemie, index) => {
+      enemie.x -= 1
+      enemie.dibujandoMonitos()
+      if(enemie.x <= drt.x + 30 && (enemie.y >= drt.y && enemie.y <= drt.y + drt.heightimg || 
+        enemie.y + enemie.heightimg >= drt.y && enemie.y + enemie.heightimg <= drt.y + drt.heightimg)){
+          drt.keepdamage(50) ////////////////////////////////////////
+          console.log('choca', drt)
+          enemigos.splice(index, 1)
+        }
+    })
    requestAnimationFrame(updateCanvas); 
 }
 
 
 //// FUNCTION VIDAS ////
 
-/*unction vidas(){
-    ctx.drawImage(livehearts);
-}*/
+function vidas(){
+    ctx.drawImage(livehearts, 20, 20, 40, 34);
+    ctx.drawImage(livehearts, 70, 20, 40, 34);
+    ctx.drawImage(livehearts, 120, 20, 40, 34);
+    ctx.drawImage(livehearts, 170, 20, 40, 34);
+    ctx.drawImage(livehearts, 220, 20, 40, 34);
+
+}
 
 
 ///////////////////////////////////// crear enemigos //////////////////////////////////
@@ -282,52 +314,17 @@ function makeEnemigo (){
 
 // esto es para determinar el enemigo aleatorio que le va a salir, definir afuera y asignar adentro del if 
 
-/*if (!drt.estaVivo()) {
-    alert("game over")
-    cancelAnimationFrame()
-}*/
 
 
 
 
-/*function mostrarDatos(vida, x, y, k) {
-    ctx.font = "40px Arial"
+
+function mostrarDatos(vida, x, y, k) {
+    ctx.font = 'Press Start 2P'
     ctx.fillText(vida, 40, 40)
-    ctx.font = "18px Arial"
-    ctx.fillText(`X: ${x},Y: ${y} Kills: ${k}`, 700, 40)
+    ctx.font = "18px Press Start 2P"
+
+    /*if (!drt.estaVivo()) {
+        cancelAnimationFrame()
+    }*/
 }
-
-mostrarDatos(drt.vida, drt.x, drt.y, drt.kills)
-
-const score = 0 */
-
-
-//////////////////////////////// FUNCTION COLISIONES /////////////////////////////
-/*function detectarcolision (){
-    enemigos.forEach((value, index) => {
-        console.log(value, drt)
-        if(intersecta(value, drt)){
-            alert('c muere')
-         return true
-        } else{
-            return false
-        }
-    })
-    
-}
-function intersecta(r1, r2){
-    return !(r2.left > r1.right || 
-        r2.right < r1.left || 
-        r2.top > r1.bottom ||
-        r2.bottom < r1.top);
-}
-
-
-/*enemigos.forEach((enemigo, index) => {
-    enemigo.x -= 2
-    enemigo.dibujarse()
-    if (enemigo.x === mario.x + 50 && enemigo.y === mario.y) {
-        mario.recibirDano(20)
-        enemigos.splice(index, 1)
-    }
-})*/
