@@ -6,25 +6,25 @@ const ctx = canvas.getContext('2d')
 
 /////////////////////////////////////// IMAGES ////////////////////////////////////////
 const calixto = new Image()
-calixto.src = "../img/calixto.png"
+calixto.src = "img/calixto.png"
 
 const carie = new Image()
-carie.src = "../img/carie.png"
+carie.src = "img/carie.png"
 
 const livehearts = new Image()
-livehearts.src = "../img/corazonvidas.png"
+livehearts.src = "img/corazonvidas.png"
 
 const drtu = new Image()
-drtu.src = "../img/4.png" 
+drtu.src = "img/4.png" 
 
 const infeccion = new Image()
-infeccion.src = "../img/infeccion.png"
+infeccion.src = "img/infeccion.png"
 
 const pastita = new Image()
-pastita.src = "../img/pasta.png"
+pastita.src = "img/pasta.png"
 
 const backimag = new Image()
-backimag.src = "../img/Background.jpeg"
+backimag.src = "img/Background.jpeg"
 
  /////////////////////////////////// enemiessss ////////////////////////////////
 
@@ -46,7 +46,6 @@ function StartGame(){
     /////poner botones////
    quitarbuttons()
     canvas.classList.remove('noShow')
-    console.log('empezar funciona')
 
     ////poner fondo////
     updateCanvas()
@@ -58,7 +57,6 @@ function StartGame(){
 
 function instrucciones(){
  quitarbuttons()
- console.log('instruciones funciona')
 }
 
 function agradecimientos(){
@@ -87,7 +85,6 @@ btninstrucciones.onclick = function() {
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
-  console.log('tache funciona')
 }
 
 // When the user clicks anywhere outside of the modal, close it
@@ -180,12 +177,10 @@ document.addEventListener('keydown', (event) => {
     switch (event.key) {
         case "ArrowDown":
            if(drt.y + 134 < canvas.height){
-            drt.bajar(); console.log('bajando')
            } 
            break;
         case "ArrowUp":
             if(drt.y - 80 > 0){
-                drt.subir(); console.log('subir')
             }
             break;
         case " ":
@@ -248,7 +243,6 @@ function updateCanvas() {
         bal.x += 1
         bal.dibujandoMonitos()
         enemigos.forEach((enemie, index) => {
-            console.log(enemie, bal.heightimg)
           if(enemie.x <= bal.x + 30 && (enemie.y >= bal.y && enemie.y <= bal.y + bal.heightimg || 
             enemie.y + enemie.heightimg >= bal.y && enemie.y + enemie.heightimg <= bal.y + bal.heightimg)){
               enemigos.splice(index, 1)
@@ -293,18 +287,18 @@ function makeEnemigo (){
     let typeOfEnemie = calixto
     let ejeY = Math.floor(Math.random() * (canvas.height - 100) ) 
     if(numeros.includes(enemigoAleatorio)){
-       console.log("Agrega un enemigo")
+      
        typeOfEnemie = calixto 
        const enemies = new Enemies(630, ejeY, ctx, typeOfEnemie, 100,100) ///ancho del canvas menos la imagen
        enemigos.push(enemies)  
     }  else if(numeroscari.includes(enemigoAleatorio)){
-        console.log("enemigo")
+      
         typeOfEnemie = carie
         const enemies = new Enemies(630,ejeY, ctx, typeOfEnemie, 100, 100)
         enemigos.push(enemies)
 
     }else if(numerosinf.includes(enemigoAleatorio)){ 
-        console.log("infecciones")
+        
         typeOfEnemie = infeccion
         const enemies = new Enemies(630, ejeY, ctx, typeOfEnemie, 100, 100)
         enemigos.push(enemies) 
