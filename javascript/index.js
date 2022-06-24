@@ -24,7 +24,7 @@ const pastita = new Image()
 pastita.src = "img/pasta.png"
 
 const backimag = new Image()
-backimag.src = "img/Background.jpeg"
+backimag.src = "img/W.jpeg"
 
  /////////////////////////////////// enemiessss ////////////////////////////////
 
@@ -41,6 +41,7 @@ function quitarbuttons(){
     const btnagradecimientos = document.getElementById('agradecimientos')
     btnagradecimientos.classList.add('noShow')
 }
+let idSetInterval = 0
 
 function StartGame(){
     /////poner botones////
@@ -50,7 +51,7 @@ function StartGame(){
     ////poner fondo////
     updateCanvas()
     
-    setInterval(()  => {
+   idSetInterval = setInterval(()  => {
         makeEnemigo() 
     }, 500);
 }
@@ -177,10 +178,13 @@ document.addEventListener('keydown', (event) => {
     switch (event.key) {
         case "ArrowDown":
            if(drt.y + 134 < canvas.height){
+            drt.bajar()
            } 
            break;
         case "ArrowUp":
             if(drt.y - 80 > 0){
+                drt.subir()
+                
             }
             break;
         case " ":
@@ -204,13 +208,6 @@ const backgroundImage = {
     },
 
     draw: function() {
-        /*ctx.drawImage(this.img, this.x, 0,  innerWidth, innerHeight);
-        if (this.speed < 0) {
-          ctx.drawImage(this.img, this.x + canvas.width, 0, innerWidth, innerHeight);
-        } else {
-          ctx.drawImage(this.img, this.x - this.img.width, 0, innerWidth, innerHeight);
-        }
-      },*/
 
       ctx.drawImage(this.img, this.x, 0, 720,360);
         if (this.speed < 0) {
@@ -229,15 +226,13 @@ const cali = new Enemies(280, 0, ctx, calixto, 250,150)
 const cari = new Enemies(280,0,ctx, carie, 128,190)
 const inf = new Enemies(280,0,ctx, infeccion, 250, 167)
 
+let id = 0
 
 function updateCanvas() {
     backgroundImage.move();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     backgroundImage.draw();
     drt.dibujandoMonitos();
-    mostrarDatos(drt.vida, drt.x, drt.y, drt.kills) 
-
-   vidas()
 
     bala.forEach((bal, indexbala) => {
         bal.x += 1
@@ -257,24 +252,19 @@ function updateCanvas() {
       enemie.dibujandoMonitos()
       if(enemie.x <= drt.x + 30 && (enemie.y >= drt.y && enemie.y <= drt.y + drt.heightimg || 
         enemie.y + enemie.heightimg >= drt.y && enemie.y + enemie.heightimg <= drt.y + drt.heightimg)){
-          drt.keepdamage(50) ////////////////////////////////////////
+          drt.keepdamage(20) ////////////////////////////////////////
           console.log('choca', drt)
           enemigos.splice(index, 1)
         }
     })
-   requestAnimationFrame(updateCanvas); 
+   id = requestAnimationFrame(updateCanvas); 
+   mostrarDatos(drt.vida, drt.x, drt.y, drt.kills) 
+
+   if (!drt.estaVivo()) {
+    clearInterval(idSetInterval)
+    cancelAnimationFrame(id)
+    console.log('cancelando frame')
 }
-
-
-//// FUNCTION VIDAS ////
-
-function vidas(){
-    ctx.drawImage(livehearts, 20, 20, 40, 34);
-    ctx.drawImage(livehearts, 70, 20, 40, 34);
-    ctx.drawImage(livehearts, 120, 20, 40, 34);
-    ctx.drawImage(livehearts, 170, 20, 40, 34);
-    ctx.drawImage(livehearts, 220, 20, 40, 34);
-
 }
 
 
@@ -317,8 +307,4 @@ function mostrarDatos(vida, x, y, k) {
     ctx.font = 'Press Start 2P'
     ctx.fillText(vida, 40, 40)
     ctx.font = "18px Press Start 2P"
-
-    /*if (!drt.estaVivo()) {
-        cancelAnimationFrame()
-    }*/
 }

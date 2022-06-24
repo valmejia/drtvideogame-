@@ -7,12 +7,17 @@ canvas {
  margin: 0;
  padding: 0;
  border: 5px solid black;
+ display: flex;
+ align-items: center;
+ align-content: center;
+ justify-content: center;
+ margin-top: 110px;
 }
 
 body{
-  background-image: url("../img/p.png"); /*backgroundgeneral*/
+  background-image: url("../img/Pre.png"); /*backgroundgeneral*/
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size:cover;
   font-family: 'Press Start 2P', cursive;
 }
 
@@ -89,11 +94,11 @@ h2 {
 
 .container{
   display: flex;
-  align-items: center;
+  align-items:center;
   flex-direction: column;
   width: 100vw;
   height: 96vh;
-  justify-content: center;
+  justify-content:space-around;
 }  
 
 button{
@@ -107,16 +112,8 @@ button{
 }
 
 button:hover{
- /*cambiar estilo cuando se selecciona*/
  border: 1px;
-
  background-image:url('../img/muelitas.jpeg') /*imagen2*/
-
- /*background-image: url('../img/corazonvidas.png');
- background-repeat:no-repeat;*/
-
- /*background-image:url('https://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/256/add-1-icon.png');
- background-repeat:no-repeat;*/
 }
 
 .social-bar {
